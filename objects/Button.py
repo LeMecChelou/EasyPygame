@@ -1,5 +1,5 @@
 import pygame
-import bases
+from objects import bases
 
 
 class Button:
@@ -170,17 +170,14 @@ class Button:
 		hover_test_X = self.pos[0] <= event_pos[0] <= self.pos[0] + self.size[0]
 		hover_test_Y = self.pos[1] <= event_pos[1] <= self.pos[1] + self.size[1]
 
-		if hover_test_X and hover_test_Y and not self.pressed:
+		# If the button is pressed, then the button can't be in hovered mode.
+		if hover_test_X and hover_test_Y:
 			self.hovered = True
 		else:
 			self.hovered = False
 
-	def is_activated(self, event_pos, *args):
-		"""Check is the button is pressed and execute the actions in function of the case.
-		It takes arguments to give to the function linked to the event when released of pressed."""
-
-		# Checking if the button is hovered by the event.
-		self.is_hovered(event_pos)
+	def is_pressed(self, *args):
+		"""Function called to check if the button is pressed."""
 
 		if self.hovered and not self.pressed:
 			self.pressed = True
@@ -192,7 +189,10 @@ class Button:
 				else:
 					self.on_press()
 
-		elif not self.hovered and self.pressed:
+	def is_released(self, *args):
+		"""Function callable to check is the button is released."""
+
+		if self.hovered and self.pressed or not self.hovered and self.pressed:
 			self.pressed = False
 
 			# Checking is there is a function linked to the on_press event.
