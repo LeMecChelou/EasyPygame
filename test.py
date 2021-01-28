@@ -2,50 +2,46 @@ from EasyPygame import *
 import pygame
 
 
-def on_release():
-	print("Bouton relaché")
-
-
-def on_press():
-	print("Bouton pressé")
-
-
 pygame.init()
 
 
 fnt = pygame.display.set_mode((800, 800))
-
-btn = Button((200, 200), (300, 75), "Test")
-btn.render_text(size=32)
-btn.on_release = on_release
-btn.on_press = on_press
+clock = pygame.time.Clock()
 
 
-# Modification du texte quand le bouton est pressé.
-btn.render_pressed_text(color=bases.ORANGE)
+btn = Button((200, 200), (300, 30), "Test")
 
-# Modification de la couleur de fond quand le bouton est survolé.
-btn.hover_background_color = bases.PINK
+
+inputTxt = TextInput((25, 100), (600, 75), True)
 
 
 run = True
 while run:
+	clock.tick(60)
+
 	fnt.fill(bases.WHITE)
 	btn.draw(fnt)
+	inputTxt.draw(fnt)
 	pygame.display.flip()
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			run = False
 
-		if event.type == pygame.MOUSEMOTION:
-			# Check if the button is hovered by the mouse.
+		elif event.type == pygame.MOUSEMOTION:
+			# Checking if the elements are hovered by the mouse.
 			btn.is_hovered(event.pos)
+			inputTxt.is_hovered(event.pos)
 
-		if event.type == pygame.MOUSEBUTTONDOWN:
+		elif event.type == pygame.MOUSEBUTTONDOWN:
 			btn.is_pressed()
-		if event.type == pygame.MOUSEBUTTONUP:
+			inputTxt.is_pressed()
+		elif event.type == pygame.MOUSEBUTTONUP:
 			btn.is_released()
+			inputTxt.is_released()
+
+		elif event.type == pygame.KEYDOWN:
+			inputTxt.listen_inputs(event)
 
 
 pygame.quit()
